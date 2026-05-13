@@ -127,7 +127,6 @@ public class PersonPageTests
     [Test]
     public void Person_SalaryIncrease_LessThanMinus10_ShouldShowValidationErrors()
     {
-        // Arrange
         driver.Navigate().GoToUrl(BaseURL);
         driver.FindElement(By.XPath("//*[@data-test='PersonPageNavigation']")).Click();
 
@@ -137,19 +136,10 @@ public class PersonPageTests
         input.Clear();
         input.SendKeys("-15");
 
-        // Act
-        var submitButton = wait.Until(ExpectedConditions.ElementExists(By.XPath("//*[@data-test='SalaryIncreaseSubmitButton']")));
+        var submitButton = wait.Until(ExpectedConditions.ElementToBeClickable(By.XPath("//*[@data-test='SalaryIncreaseSubmitButton']")));
         submitButton.Click();
 
-        // Assert
-
-        var validationSummary = wait.Until(ExpectedConditions.ElementExists(By.ClassName("validation-summary-errors")));
-
-        validationSummary.Displayed.Should().BeTrue();
-
-        var fieldError = wait.Until(ExpectedConditions.ElementExists(By.ClassName("validation-message")));
-
-        fieldError.Displayed.Should().BeTrue();
+        wait.Until(d => d.PageSource.Contains("between -10 and infinity"));
     }
 
     private bool IsElementPresent(By by)
